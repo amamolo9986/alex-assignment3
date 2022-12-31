@@ -15,33 +15,19 @@ public class Main {
 
 		BufferedReader fileReader = null;
 		try {
+
 			fileReader = new BufferedReader(new FileReader("user.data.txt"));
 			String line;
 
 			int i = 0;
-
 			while ((line = fileReader.readLine()) != null) {
 				String[] userData = line.split(",");
 				String username = userData[0];
 				String password = userData[1];
 				String name = userData[2];
 
-				users[i] = userService.createUser(userData[0], userData[1], userData[2]);
+				users[i] = userService.createUser(username, password, name);
 				i++;
-
-				System.out.println("Enter Username:");
-				username = scan.nextLine();
-				System.out.println("Enter Password");
-				password = scan.nextLine();
-
-				if (username.equals(userData[0]) && password.equals(userData[1])) {
-					System.out.println("Welcome " + userData[2]);
-					i++;
-					break;
-				} else {
-					System.out.println("Invalid login. Please try again.");
-				}
-
 			}
 
 		} catch (FileNotFoundException e) {
@@ -55,8 +41,23 @@ public class Main {
 				e.printStackTrace();
 			}
 		}
-	}
-}
 
-//i'm only getting a valid input for a username and password from the first line of my file
-//if i type a user and password from any other line, i get an invalid login message 
+		System.out.println("Enter Username: ");
+		String username = scan.next();
+		System.out.println("Enter Password: ");
+		String password = scan.next();
+
+		int i = 0;
+		for (User user : users) {
+			i++;
+			if (username.equals(users[i].getUsername()) && password.equals(users[i].getPassword())) {
+				System.out.println("Welcome " + users[i].getName());
+				break;
+			} else {
+				System.out.println("Invalid login. Please try again.");
+			}
+
+		}
+	}
+	}
+
