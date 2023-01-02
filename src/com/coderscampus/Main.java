@@ -41,23 +41,40 @@ public class Main {
 				e.printStackTrace();
 			}
 		}
+		User successfulLogin = null;
 
-		System.out.println("Enter Username: ");
-		String username = scan.next();
-		System.out.println("Enter Password: ");
-		String password = scan.next();
+		int attempts = 0;
+		while (attempts < 5) {
+			attempts++;
+			System.out.println("Enter Username: ");
+			String username = scan.next();
+			System.out.println("Enter Password: ");
+			String password = scan.next();
+			successfulLogin = validateUser(users, username, password);
 
-		int i = 0;
-		for (User user : users) {
-			i++;
-			if (username.equals(users[i].getUsername()) && password.equals(users[i].getPassword())) {
-				System.out.println("Welcome " + users[i].getName());
+			if (successfulLogin != null && attempts <= 5) {
 				break;
 			} else {
-				System.out.println("Invalid login. Please try again.");
+				if (attempts < 5){
+					System.out.println("Invalid login, please try again");
+				}
+			}
+			if (attempts == 5) {
+				System.out.println("Too many failed login attempts, your account is locked.");
+
+			}
+		}
+		scan.close();
+	}
+
+	public static User validateUser(User[] users, String username, String password) {
+		for (User user : users) {
+			if (user.getUsername().equalsIgnoreCase(username) && user.getPassword().equals(password)) {
+				System.out.println("Welcome " + user.getName());
+				return user;
 			}
 
 		}
+		return null;
 	}
-	}
-
+}
